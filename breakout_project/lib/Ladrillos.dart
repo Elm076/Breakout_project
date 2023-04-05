@@ -15,6 +15,8 @@ class Ladrillos extends StatelessWidget{
       height: altura,
       decoration: BoxDecoration(
         color: Colors.amber[900],
+        border: Border.all(color: Colors.black,
+                            width: 3)
       ),
     );
   }

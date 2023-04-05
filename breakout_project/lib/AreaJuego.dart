@@ -24,7 +24,7 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
   late double xLadrillo;
   late double yLadrillo;
 
-
+  List<Ladrillos> listaLadrillos = [];
 
   late AnimationController controladorAnimacion;
 
@@ -86,6 +86,9 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
             altoRaqueta = altoAreaJuego / 20.0;
             anchoLadrillo = anchoAreaJuego / 6.0; //tamanio de los ladrillos
             altoLadrillo = altoAreaJuego / 40.0;
+
+            inicializarListaLadrillos(listaLadrillos, 19, anchoAreaJuego);
+
             return Stack( //Se devuelven la bola y Raqueta
               children: <Widget>[
                 Positioned(
@@ -104,11 +107,6 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
                   ),
                 ),
                 Positioned(
-                  child: Ladrillos(anchura: anchoLadrillo, altura: altoLadrillo, xPosition: xLadrillo, yPosition: yLadrillo,),
-                  top: yLadrillo,
-                  left: xLadrillo,
-                ),
-                Positioned(
                   top: 12,
                   right: 12,
                   child: Text(
@@ -120,6 +118,12 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
                     ),
                   ),
                 ),
+                for (Ladrillos ladrillo in listaLadrillos)
+                  Positioned(
+                    child: ladrillo,
+                    top: ladrillo.yPosition,
+                    left: ladrillo.xPosition,
+                  ),
               ],
             );
           }
@@ -208,6 +212,22 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
       );
         }
     );
+  }
+
+  void inicializarListaLadrillos(List<Ladrillos> lista, int numLadrillos, double anchoAreaJuego){
+    double x = 0;
+    double y = 0;
+    for(int i = 0; i<numLadrillos; i++){
+
+      lista.add(Ladrillos(anchura: anchoLadrillo, altura: altoLadrillo, xPosition: x, yPosition: y));
+      if (x + lista[i].anchura >= (anchoAreaJuego - 1)) { //aquí he puesto el -1 porque hay inexactitud y no lo interpreta bien
+        x = 0;
+        y = y + lista[i].altura;
+      } else {
+        x = x + lista[i].anchura;
+      }
+
+    }
   }
 
 }
