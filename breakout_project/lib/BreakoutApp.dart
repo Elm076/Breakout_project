@@ -1,3 +1,4 @@
+import 'package:breakout_project/LadrillosProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:breakout_project/AreaJuego.dart';
 
@@ -7,7 +8,7 @@ class BreakoutApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final titulo = 'Breakout';
-
+    LadrillosProvider ladrillosprovider;
     return MaterialApp(
       title: titulo,
       theme: ThemeData(

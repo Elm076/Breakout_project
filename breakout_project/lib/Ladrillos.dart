@@ -5,8 +5,9 @@ class Ladrillos extends StatelessWidget{
   double altura;
   double xPosition;
   double yPosition;
+  bool vivo;
 
-  Ladrillos({Key? key, this.anchura = 100, this.altura = 10, required this.xPosition, required this.yPosition});
+  Ladrillos({Key? key, this.anchura = 100, this.altura = 10, required this.xPosition, required this.yPosition, required this.vivo});
 
   @override
   Widget build(BuildContext context){

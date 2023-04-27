@@ -2,6 +2,8 @@ import 'package:breakout_project/Ladrillos.dart';
 import 'package:flutter/material.dart';
 import 'package:breakout_project/Bola.dart';
 import 'package:breakout_project/Raqueta.dart';
+import 'package:breakout_project/LadrillosProvider.dart';
+import 'package:provider/provider.dart';
 
 enum Direccion {
   arriba, abajo, izquierda, derecha,
@@ -24,7 +26,8 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
   late double xLadrillo;
   late double yLadrillo;
 
-  List<Ladrillos> listaLadrillos = [];
+  late LadrillosProvider ladrillosProvider;
+  late List<Ladrillos> listaLadrillos;
 
   late AnimationController controladorAnimacion;
 
@@ -47,6 +50,24 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
     yBola = 20.0;
     xLadrillo = 0.0;
     yLadrillo = 0.0;
+
+    ladrillosProvider = Provider.of<LadrillosProvider>(context, listen: false);
+    listaLadrillos = ladrillosProvider.ladrillos;
+
+    //preguntar esto
+
+      for(int i = 0; i<listaLadrillos.length; i++){
+        if (xLadrillo + listaLadrillos[i].anchura >= (anchoAreaJuego - 1)) { //aquí he puesto el -1 porque hayjj inexactitud y no lo interpreta bien
+          xLadrillo = 0;
+          yLadrillo = yLadrillo + listaLadrillos[i].altura;
+        } else {
+          xLadrillo = xLadrillo + listaLadrillos[i].anchura;
+        }
+
+      }
+
+
+
     incremento = 5.0;
     direccionVertical = Direccion.abajo;
     direccionHorizontal = Direccion.derecha;
@@ -86,8 +107,6 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
             altoRaqueta = altoAreaJuego / 20.0;
             anchoLadrillo = anchoAreaJuego / 6.0; //tamanio de los ladrillos
             altoLadrillo = altoAreaJuego / 40.0;
-
-            inicializarListaLadrillos(listaLadrillos, 19, anchoAreaJuego);
 
             return Stack( //Se devuelven la bola y Raqueta
               children: <Widget>[
@@ -214,20 +233,5 @@ class _AreaJuegoState extends State<AreaJuego> with SingleTickerProviderStateMix
     );
   }
 
-  void inicializarListaLadrillos(List<Ladrillos> lista, int numLadrillos, double anchoAreaJuego){
-    double x = 0;
-    double y = 0;
-    for(int i = 0; i<numLadrillos; i++){
-
-      lista.add(Ladrillos(anchura: anchoLadrillo, altura: altoLadrillo, xPosition: x, yPosition: y));
-      if (x + lista[i].anchura >= (anchoAreaJuego - 1)) { //aquí he puesto el -1 porque hay inexactitud y no lo interpreta bien
-        x = 0;
-        y = y + lista[i].altura;
-      } else {
-        x = x + lista[i].anchura;
-      }
-
-    }
-  }
 
 }
