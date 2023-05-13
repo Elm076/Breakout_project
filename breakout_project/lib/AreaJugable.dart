@@ -12,6 +12,8 @@ import 'package:breakout_project/Raqueta.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math';
 import 'package:breakout_project/FuncionesPublicas.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 
 enum Direccion {
   arriba, abajo, izquierda, derecha,
@@ -24,6 +26,7 @@ class AreaJugable extends StatefulWidget {
 }
 //declaracion de la clase. Con with hacemos que se puedan usar los metodos de una clase sin extenderla
 class _AreaJugableState extends State<AreaJugable> with SingleTickerProviderStateMixin {
+
   late double anchoRaqueta;
   late double altoRaqueta;
   double anchoAreaJuego = 0.0; //Variables que van a tener el alto y ancho max
@@ -54,6 +57,11 @@ class _AreaJugableState extends State<AreaJugable> with SingleTickerProviderStat
   late double xRaqueta;
 
   int puntuacion = 0;
+  
+  late AudioPlayer ReproductorAudio;
+  late AudioCache  ReproductorCache;
+
+
 
   @override
   void initState(){
@@ -101,7 +109,14 @@ class _AreaJugableState extends State<AreaJugable> with SingleTickerProviderStat
       });
       comprobarBordes();
     });
+    AudioPlayer();
     controladorAnimacion.forward(); //con esto se ejecuta la animacion
+
+    ReproductorAudio = AudioPlayer();
+    ReproductorCache = AudioCache(fixedPlayer: ReproductorAudio);
+    ReproductorCache.play('audios/InicioAreaJugable.mp3');
+
+
     super.initState();
   }
 
@@ -341,6 +356,13 @@ class _AreaJugableState extends State<AreaJugable> with SingleTickerProviderStat
         controladorAnimacion.stop();
 
         guardarPuntuacion();
+
+        double volumen = 1.0; //ESTO ESTÁ A 1 PORQUE ES LO QUE SE DA POR DEFECTO EN EL .PLAY
+        for(int i = 0; i < 5; i++){
+          ReproductorAudio.setVolume(volumen-0.2);
+        }
+        ReproductorAudio.stop();
+        
         preguntarRepetirPartida(context); //si la bola no da en la raqueta, preguntar si se quiere seguir jugando
       }
     }
@@ -428,6 +450,7 @@ class _AreaJugableState extends State<AreaJugable> with SingleTickerProviderStat
             child: const Text('Si'),
             onPressed: () {
               setState(() {
+                ReproductorAudio.resume();
                 xBola = 200.0;
                 yBola = 200.0;
                 puntuacion = 0;
